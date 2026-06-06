@@ -1,0 +1,831 @@
+:root {
+    --primary-yellow: #f2f200;
+    --primary-orange: #f29b11;
+    --dark-bg: #0a0a0a;
+    --darker-bg: #050505;
+    --text-white: #ffffff;
+    --text-gray: #a0a0a0;
+    --font-poppins: 'Poppins', sans-serif;
+    --font-script: 'Kaushan Script', cursive;
+    --font-outfit: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-white);
+    font-family: var(--font-poppins);
+    line-height: 1.6;
+}
+
+/* Custom Cursor (Restored for Premium feel) */
+.custom-cursor {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    background: var(--primary-yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background 0.3s, transform 0.1s ease-out;
+    mix-blend-mode: difference;
+}
+
+@media (max-width: 1024px) {
+    .custom-cursor { display: none; }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Header Styles */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 35px 60px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 10100;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(0px);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+}
+
+header.scrolled {
+    padding: 18px 60px;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-family: var(--font-outfit);
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    color: var(--text-white);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    margin-left: 60px;
+}
+
+.nav-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-family: var(--font-outfit);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    padding: 10px 5px;
+}
+
+.nav-links a:hover {
+    color: var(--primary-orange);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    position: absolute;
+    right: 60px;
+}
+
+.info-icon,
+.menu-btn {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-white);
+}
+
+.menu-btn {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Social Sidebar */
+.social-sidebar {
+    position: fixed;
+    left: 60px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    z-index: 100;
+}
+
+.vertical-line {
+    width: 2px;
+    height: 150px;
+    background: var(--text-white);
+    margin-bottom: 30px;
+}
+
+.social-link {
+    color: var(--text-white);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.social-link:hover {
+    color: var(--primary-orange);
+    transform: scale(1.2);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.98);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+    visibility: hidden;
+}
+
+.mobile-menu.active {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.mobile-nav-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-family: var(--font-outfit);
+    font-weight: 900;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+    color: transparent;
+    transition: 0.3s;
+}
+
+.mobile-menu.active .mobile-nav-links a {
+    color: var(--text-white);
+    -webkit-text-stroke: 0px;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a:active {
+    color: var(--primary-orange);
+}
+
+.mobile-socials {
+    display: flex;
+    gap: 30px;
+}
+
+.mobile-socials a {
+    color: var(--text-white);
+    font-size: 1.5rem;
+    transition: 0.3s;
+}
+
+/* Noise & Grid Overlays */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+.dot-matrix {
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.ambient-glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 70vh;
+    background: radial-gradient(circle, rgba(242, 242, 0, 0.08) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Hero Video Section Area */
+.hero-video-section {
+    padding-top: 0;
+    margin-top: 0;
+    background: var(--dark-bg);
+    position: relative;
+    z-index: 5;
+}
+
+.video-container {
+    width: 100%;
+    height: 95vh;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    background: #000;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9) contrast(1);
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 40%),
+                radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.4) 100%);
+    pointer-events: none;
+}
+
+/* Gallery Hero Section Area */
+.gallery-hero {
+    padding: 60px 0 80px;
+    background: var(--dark-bg);
+    text-align: center;
+    position: relative;
+}
+
+.gallery-hero h1 {
+    font-family: var(--font-outfit);
+    font-size: 5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--text-white);
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+}
+
+.gallery-hero .script-text {
+    font-family: var(--font-script);
+    font-size: 3rem;
+    color: var(--primary-orange);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.gallery-hero p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Fleet Filter Section */
+.fleet-filter-section {
+    background: var(--dark-bg);
+    padding: 20px 0 40px;
+    position: relative;
+    z-index: 10;
+}
+
+.filter-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-family: var(--font-outfit);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: var(--primary-yellow);
+    color: #000;
+    border-color: var(--primary-yellow);
+}
+
+.search-box {
+    position: relative;
+    margin-left: 20px;
+}
+
+.search-box input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px 10px 40px;
+    border-radius: 30px;
+    color: var(--text-white);
+    font-family: var(--font-poppins);
+    outline: none;
+    transition: 0.3s;
+    width: 200px;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-orange);
+    background: rgba(255, 255, 255, 0.1);
+    width: 250px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-gray);
+    pointer-events: none;
+}
+
+/* Section Styles */
+.section-title {
+    font-family: var(--font-outfit);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 30px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.section-desc {
+    font-size: 1.05rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    text-align: center;
+}
+
+/* Normal Cars Section */
+.normal-cars {
+    background: #fff;
+    color: #000;
+    padding: 80px 0;
+}
+
+.normal-cars .section-title {
+    color: #000;
+}
+
+.normal-cars .section-title span {
+    color: var(--primary-orange);
+}
+
+/* Luxury Cars Section */
+.luxury-cars {
+    background: var(--dark-bg);
+    padding: 80px 0;
+    position: relative;
+}
+
+.luxury-cars::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 20%);
+}
+
+.luxury-cars .section-title {
+    color: var(--text-white);
+}
+
+.luxury-cars .section-title span {
+    color: var(--primary-yellow);
+}
+
+.luxury-cars .section-desc {
+    color: var(--text-gray);
+}
+
+/* Gallery Grid - Normal Cars */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+/* Luxury Grid - Premium Style */
+.luxury-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+}
+
+/* Gallery Card Styles */
+.gallery-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #f8f8f8;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    aspect-ratio: 4/3;
+}
+
+.gallery-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 20px;
+    transition: transform 0.4s ease;
+}
+
+.gallery-card:hover img {
+    transform: scale(1.08);
+}
+
+.gallery-card .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+}
+
+.gallery-card:hover .card-overlay {
+    transform: translateY(0);
+}
+
+.gallery-card .card-overlay h3 {
+    font-family: var(--font-outfit);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+/* Luxury Card Styles */
+.luxury-card {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #0d0d0d;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    aspect-ratio: 16/10;
+    padding: 30px;
+}
+
+.luxury-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+    border-color: var(--primary-yellow);
+}
+
+.luxury-card .crown-icon {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    background: rgba(242, 242, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.luxury-card .crown-icon i {
+    color: var(--primary-yellow);
+    font-size: 1.2rem;
+}
+
+.luxury-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.6s ease;
+    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 1));
+}
+
+/* BMW M5 - Precision centering and 80%+ size increase */
+.luxury-card:first-child img {
+    transform: scale(2.35) translateY(-35px);
+}
+
+.luxury-card:first-child:hover img {
+    transform: scale(2.45) translateY(-40px);
+}
+
+/* Lamborghini - 40% size increase */
+.luxury-card:nth-child(3) img {
+    transform: scale(1.4);
+}
+
+.luxury-card:nth-child(3):hover img {
+    transform: scale(1.5);
+}
+
+/* McLaren - 50% size increase */
+.luxury-card:nth-child(4) img {
+    transform: scale(1.5);
+}
+
+.luxury-card:nth-child(4):hover img {
+    transform: scale(1.6);
+}
+
+.luxury-card:hover img {
+    transform: scale(1.1);
+}
+
+.luxury-card .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 25px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.luxury-card .card-overlay h3 {
+    font-family: var(--font-outfit);
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--primary-yellow);
+    text-transform: uppercase;
+}
+
+.luxury-card .card-overlay p {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
+
+/* Fleet CTA Section */
+.fleet-cta {
+    background: linear-gradient(135deg, var(--primary-yellow), var(--primary-orange));
+    padding: 80px 0;
+    text-align: center;
+}
+
+.fleet-cta h2 {
+    font-family: var(--font-outfit);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #000;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.fleet-cta p {
+    color: #000;
+    opacity: 0.8;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+}
+
+.btn-fleet {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 45px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 50px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-fleet:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer */
+.main-footer {
+    background: var(--darker-bg);
+    border-top: 1px solid #222;
+    padding: 35px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.6;
+    font-size: 0.85rem;
+}
+
+.footer-logo {
+    font-size: 1.3rem;
+    font-weight: 900;
+}
+
+.footer-meta {
+    opacity: 0.7;
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.8rem;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.12);
+    box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 30px;
+    }
+
+    header {
+        padding: 25px 40px;
+    }
+
+    header.scrolled {
+        padding: 15px 40px;
+    }
+
+    .social-sidebar {
+        left: 20px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .luxury-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .nav-links {
+        display: none;
+    }
+
+    .social-sidebar {
+        display: none;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-hero h1 {
+        font-size: 3rem;
+    }
+
+    .gallery-hero .script-text {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 20px;
+    }
+
+    header.scrolled {
+        padding: 10px 20px;
+    }
+
+    .gallery-hero {
+        padding: 120px 0 60px;
+    }
+
+    .gallery-hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .gallery-hero .script-text {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .luxury-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .btn-fleet {
+        padding: 15px 35px;
+        font-size: 0.95rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .gallery-hero .script-text {
+        font-size: 1.5rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .luxury-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 1.7rem;
+    }
+}

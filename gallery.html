@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | NaviRide — Our Car Collection</title>
+    <meta name="description"
+        content="Explore our premium car collection — Simple & Premium cars available for rent in Navi Mumbai.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Auth redirect + global logout -->
+    <script>
+        const SUPABASE_URL = 'https://ihgyzkjaxdjscugzcpfe.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZ3l6a2pheGRqc2N1Z3pjcGZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MTkzMDcsImV4cCI6MjA5NjI5NTMwN30.QxFZjQ2s1DGtwrUhA0vCzSN6zuqk35DSIiUyYIQS4dE';
+        const _authClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Global logout — called directly from onclick in HTML
+        async function doLogout(e) {
+            if (e) e.preventDefault();
+            try { await _authClient.auth.signOut(); } catch(err) { console.warn(err); }
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        }
+
+        // Redirect unauthenticated users to login
+        _authClient.auth.getSession().then(({ data: { session } }) => {
+            if (!session || !session.user) {
+                window.location.replace('login.html');
+            }
+        });
+    </script>
+
+    <link rel="stylesheet" href="assets/css/gallery.css">
+
+    <style>
+        /* ═══════════════════════════════════════════════════════
+           SECTION OVERRIDES - Simple & Premium
+        ═══════════════════════════════════════════════════════ */
+        .simple-cars {
+            background: #fff;
+            color: #000;
+            padding: 80px 0;
+        }
+        .simple-cars .section-title { color: #000; }
+        .simple-cars .section-title span { color: #f29b11; }
+        .simple-cars .section-desc { color: #555; }
+
+        .premium-cars {
+            background: #0a0a0a;
+            padding: 100px 0 80px;
+            position: relative;
+        }
+        .premium-cars::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 80px;
+            background: #fff;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 20%);
+        }
+        .premium-cars .section-title { color: #fff; }
+        .premium-cars .section-title span { color: #f2f200; }
+        .premium-cars .section-desc { color: #a0a0a0; }
+
+        /* Rate badges on cards */
+        .rate-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0,0,0,0.75);
+            color: #f29b11;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(6px);
+            z-index: 5;
+            letter-spacing: 0.5px;
+        }
+        .luxury-card .rate-badge {
+            background: rgba(242,242,0,0.15);
+            color: #f2f200;
+            border: 1px solid rgba(242,242,0,0.3);
+        }
+
+        /* Booked overlay */
+        .booked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.72);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: inherit;
+            z-index: 20;
+            backdrop-filter: blur(3px);
+        }
+        .booked-overlay i { color: #2ecc71; font-size: 2rem; }
+        .booked-overlay span {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+            color: #2ecc71;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Book Now btn on simple cards */
+        .btn-book {
+            background: linear-gradient(135deg, #f29b11, #f2c200);
+            color: #000;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 30px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+        .btn-book:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(242,155,17,0.4); }
+
+        .btn-book-luxury {
+            background: linear-gradient(135deg, #f2f200, #f29b11);
+            color: #000;
+            border: none;
+            padding: 10px 26px;
+            border-radius: 30px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+        .btn-book-luxury:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(242,242,0,0.4); }
+
+        /* ═══════════════════════════════════════════════════════
+           BOOKING MODAL
+        ═══════════════════════════════════════════════════════ */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 50000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 540px;
+            max-height: 92vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 30px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            transform: translateY(30px) scale(0.96);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+        }
+        .modal-backdrop.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px; right: 18px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            color: #fff;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.2); }
+
+        /* Car Summary Header */
+        .modal-car-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .modal-car-img {
+            width: 100px;
+            height: 66px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 8px;
+            flex-shrink: 0;
+        }
+        .modal-car-info { flex: 1; }
+        .modal-car-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .modal-car-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .badge-simple { background: #f29b11; color: #000; }
+        .badge-premium { background: #f2f200; color: #000; }
+
+        .modal-car-rates {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .modal-car-rates span {
+            font-size: 0.78rem;
+            color: #a0a0a0;
+            font-family: 'Poppins', sans-serif;
+        }
+        .modal-car-rates strong { color: #fff; }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-group label {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group select {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.25s;
+            width: 100%;
+        }
+        .form-group input:focus,
+        .form-group select:focus { border-color: #f29b11; }
+        .form-group select option { background: #1a1a1a; }
+        .form-group input::placeholder { color: #555; }
+
+        /* Total Price */
+        .total-price-box {
+            background: linear-gradient(135deg, #1a1000, #2a1800);
+            border: 1px solid rgba(242,155,17,0.25);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 20px 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .total-price-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .total-price-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #f29b11;
+            letter-spacing: -1px;
+        }
+
+        /* Pay Button */
+        .btn-pay {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #f2c200, #f29b11);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(242,155,17,0.5);
+        }
+        .btn-pay:disabled {
+            opacity: 0.6; cursor: not-allowed; transform: none;
+        }
+
+        /* ═══════════════════════════════════════════════════════
+           QR PAYMENT STEP
+        ═══════════════════════════════════════════════════════ */
+        .qr-step {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .qr-step.visible { display: flex; }
+
+        .qr-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        .qr-subtitle {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            margin-top: -12px;
+        }
+        .qr-code-wrap {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 20px 60px rgba(242,155,17,0.2);
+        }
+        .qr-code-wrap img { width: 200px; height: 200px; display: block; }
+
+        .qr-amount {
+            background: rgba(242,155,17,0.1);
+            border: 1px solid rgba(242,155,17,0.3);
+            border-radius: 10px;
+            padding: 14px 30px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .qr-amount .label { font-size: 0.8rem; color: #a0a0a0; margin-bottom: 4px; }
+        .qr-amount .amount { font-size: 1.8rem; font-weight: 900; color: #f29b11; }
+
+        .qr-note {
+            font-size: 0.78rem;
+            color: #666;
+            max-width: 320px;
+            line-height: 1.6;
+        }
+
+        .btn-done {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a8c4e, #27ae60);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-done:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(39,174,96,0.4);
+        }
+
+        /* Error box */
+        .modal-error {
+            background: rgba(231,76,60,0.15);
+            border: 1px solid rgba(231,76,60,0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            color: #e74c3c;
+            display: none;
+            margin-bottom: 12px;
+        }
+        .modal-error.show { display: block; }
+    </style>
+</head>
+
+<body>
+    <div class="custom-cursor"></div>
+    <div class="noise-overlay"></div>
+    <div class="dot-matrix"></div>
+    <div class="ambient-glow"></div>
+    <main>
+        <!-- Header -->
+        <header id="main-header">
+            <a href="index.html" class="logo">NAVI<span style="color: var(--primary-orange);">RIDE</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#fleet">Fleet</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="bookings.html">Bookings</a>
+                <a href="index.html#services">Services</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="#" id="auth-nav-link" onclick="doLogout(event)">Logout</a>
+            </div>
+            <div class="header-actions">
+                <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+            </div>
+        </header>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#fleet">Fleet</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="bookings.html">Bookings</a>
+                <a href="index.html#services">Services</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="#" id="auth-mobile-link" onclick="doLogout(event)">Logout</a>
+            </div>
+            <div class="mobile-socials">
+                <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+
+        <!-- Social Sidebar -->
+        <aside class="social-sidebar">
+            <div class="vertical-line"></div>
+            <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        </aside>
+
+        <!-- Hero Video Section -->
+        <section class="hero-video-section">
+            <div class="video-container">
+                <video autoplay muted loop playsinline class="hero-video">
+                    <source src="assets/video/video.mp4" type="video/mp4">
+                </video>
+                <div class="video-overlay"></div>
+            </div>
+        </section>
+
+        <!-- Gallery Hero -->
+        <section class="gallery-hero">
+            <div class="container">
+                <span class="script-text">Book Your</span>
+                <h1>Perfect Ride</h1>
+                <p>Choose from our curated fleet — Simple everyday cars or Premium luxury vehicles. Click any car to book instantly.</p>
+            </div>
+        </section>
+
+        <!-- Filter Bar -->
+        <section class="fleet-filter-section">
+            <div class="container">
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">All Cars</button>
+                    <button class="filter-btn" data-filter="simple">Simple Fleet</button>
+                    <button class="filter-btn" data-filter="premium">Premium Collection</button>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="carSearch" placeholder="Search cars...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simple Cars Section -->
+        <section class="simple-cars" id="simple-cars">
+            <div class="container">
+                <h2 class="section-title">Simple <span>Cars</span></h2>
+                <p class="section-desc">Reliable, fuel-efficient, perfect for city rides and daily commutes — ₹5,000/hr</p>
+                <div class="gallery-grid" id="simple-grid">
+
+                    <div class="gallery-card" data-car-id="1" data-car-name="Hyundai Creta" data-category="simple" data-rate="5000" data-img="assets/img/Hyundai_Creta.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Hyundai_Creta.png" alt="Hyundai Creta">
+                        <div class="card-overlay">
+                            <h3>Hyundai Creta</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="2" data-car-name="Hyundai i20" data-category="simple" data-rate="5000" data-img="assets/img/Hyundai_i20.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Hyundai_i20.png" alt="Hyundai i20">
+                        <div class="card-overlay">
+                            <h3>Hyundai i20</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="3" data-car-name="Mahindra XUV700" data-category="simple" data-rate="5000" data-img="assets/img/Mahindra_XUV700.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Mahindra_XUV700.png" alt="Mahindra XUV700">
+                        <div class="card-overlay">
+                            <h3>Mahindra XUV700</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="4" data-car-name="Maruti Suzuki Brezza" data-category="simple" data-rate="5000" data-img="assets/img/Maruti_Suzuki_Brezza.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Maruti_Suzuki_Brezza.png" alt="Maruti Suzuki Brezza">
+                        <div class="card-overlay">
+                            <h3>Maruti Suzuki Brezza</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="5" data-car-name="Maruti Suzuki Swift" data-category="simple" data-rate="5000" data-img="assets/img/Maruti_Suzuki_Swift.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Maruti_Suzuki_Swift.png" alt="Maruti Suzuki Swift">
+                        <div class="card-overlay">
+                            <h3>Maruti Suzuki Swift</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="6" data-car-name="Tata Altroz" data-category="simple" data-rate="5000" data-img="assets/img/Tata_Altroz.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Tata_Altroz.png" alt="Tata Altroz">
+                        <div class="card-overlay">
+                            <h3>Tata Altroz</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="7" data-car-name="Tata Nexon" data-category="simple" data-rate="5000" data-img="assets/img/Tata_Nexon.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Tata_Nexon.png" alt="Tata Nexon">
+                        <div class="card-overlay">
+                            <h3>Tata Nexon</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="8" data-car-name="Tata Tiago" data-category="simple" data-rate="5000" data-img="assets/img/Tata_Tiago.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Tata_Tiago.png" alt="Tata Tiago">
+                        <div class="card-overlay">
+                            <h3>Tata Tiago</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="9" data-car-name="Mahindra Thar" data-category="simple" data-rate="5000" data-img="assets/img/Thar.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Thar.png" alt="Mahindra Thar">
+                        <div class="card-overlay">
+                            <h3>Mahindra Thar</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" data-car-id="10" data-car-name="Maruti Wagon R" data-category="simple" data-rate="5000" data-img="assets/img/Wagon_R.png">
+                        <span class="rate-badge">₹5,000/hr</span>
+                        <img src="assets/img/Wagon_R.png" alt="Maruti Wagon R">
+                        <div class="card-overlay">
+                            <h3>Maruti Wagon R</h3>
+                            <button class="btn-book">Book Now</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Cars Section -->
+        <section class="premium-cars" id="premium-cars">
+            <div class="container">
+                <h2 class="section-title">Premium <span>Cars</span></h2>
+                <p class="section-desc">Hypercar excellence for extraordinary experiences — ₹10,000/hr</p>
+                <div class="luxury-grid" id="premium-grid">
+
+                    <div class="luxury-card" data-car-id="11" data-car-name="BMW M5" data-category="premium" data-rate="10000" data-img="assets/img/BMW M5.png">
+                        <div class="crown-icon"><i class="fas fa-crown"></i></div>
+                        <span class="rate-badge">₹10,000/hr</span>
+                        <img src="assets/img/BMW M5.png" alt="BMW M5">
+                        <div class="card-overlay">
+                            <h3>BMW M5</h3>
+                            <p>Performance Luxury Sedan</p>
+                            <button class="btn-book-luxury">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="luxury-card" data-car-id="12" data-car-name="Bugatti" data-category="premium" data-rate="10000" data-img="assets/img/Bugatti.png">
+                        <div class="crown-icon"><i class="fas fa-crown"></i></div>
+                        <span class="rate-badge">₹10,000/hr</span>
+                        <img src="assets/img/Bugatti.png" alt="Bugatti">
+                        <div class="card-overlay">
+                            <h3>Bugatti</h3>
+                            <p>Hypercar Excellence</p>
+                            <button class="btn-book-luxury">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="luxury-card" data-car-id="13" data-car-name="Lamborghini" data-category="premium" data-rate="10000" data-img="assets/img/Lamborgini.png">
+                        <div class="crown-icon"><i class="fas fa-crown"></i></div>
+                        <span class="rate-badge">₹10,000/hr</span>
+                        <img src="assets/img/Lamborgini.png" alt="Lamborghini">
+                        <div class="card-overlay">
+                            <h3>Lamborghini</h3>
+                            <p>Italian Supercar</p>
+                            <button class="btn-book-luxury">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="luxury-card" data-car-id="14" data-car-name="McLaren" data-category="premium" data-rate="10000" data-img="assets/img/McLaren.png">
+                        <div class="crown-icon"><i class="fas fa-crown"></i></div>
+                        <span class="rate-badge">₹10,000/hr</span>
+                        <img src="assets/img/McLaren.png" alt="McLaren">
+                        <div class="card-overlay">
+                            <h3>McLaren</h3>
+                            <p>British Engineering Marvel</p>
+                            <button class="btn-book-luxury">Book Now</button>
+                        </div>
+                    </div>
+
+                    <div class="luxury-card" data-car-id="15" data-car-name="Rolls Royce" data-category="premium" data-rate="10000" data-img="assets/img/Rollas Royal.png">
+                        <div class="crown-icon"><i class="fas fa-crown"></i></div>
+                        <span class="rate-badge">₹10,000/hr</span>
+                        <img src="assets/img/Rollas Royal.png" alt="Rolls Royce">
+                        <div class="card-overlay">
+                            <h3>Rolls Royce</h3>
+                            <p>Ultimate Royalty</p>
+                            <button class="btn-book-luxury">Book Now</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container footer-content">
+                <div class="footer-logo">© 2026 NaviRide — Your Ride, Your Way</div>
+                <div class="footer-meta">Privacy Policy | Terms &amp; Conditions</div>
+            </div>
+        </footer>
+
+        <!-- Floating WhatsApp -->
+        <a href="https://wa.me/9221276570" class="whatsapp-float" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════
+         BOOKING MODAL
+    ═══════════════════════════════════════════════════════ -->
+    <div class="modal-backdrop" id="bookingModal">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" id="modalClose" title="Close">✕</button>
+
+            <!-- STEP 1: Booking Form -->
+            <div id="formStep">
+                <!-- Car Header -->
+                <div class="modal-car-header">
+                    <img src="" alt="" class="modal-car-img" id="modalCarImg">
+                    <div class="modal-car-info">
+                        <div class="modal-car-name" id="modalCarName">Car Name</div>
+                        <span class="modal-car-badge" id="modalCarBadge">Simple</span>
+                        <div class="modal-car-rates">
+                            <span>₹<strong id="rateHr">0</strong>/hr</span>
+                            <span>₹<strong id="rateDay">0</strong>/day</span>
+                            <span>₹<strong id="rateWeek">0</strong>/week</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-error" id="modalError"></div>
+
+                <!-- Form -->
+                <form id="bookingForm" autocomplete="on">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bFullName">Full Name</label>
+                            <input type="text" id="bFullName" placeholder="John Doe" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="bPhone">Contact Number</label>
+                            <input type="tel" id="bPhone" placeholder="+91 98765 43210" required autocomplete="tel">
+                        </div>
+                        <div class="form-group">
+                            <label for="bDate">Booking Date</label>
+                            <input type="date" id="bDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bTime">Start Time</label>
+                            <input type="time" id="bTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bDuration">Duration</label>
+                            <input type="number" id="bDuration" min="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bUnit">Unit</label>
+                            <select id="bUnit">
+                                <option value="hour">Hours</option>
+                                <option value="day">Days</option>
+                                <option value="week">Weeks</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Total Price -->
+                    <div class="total-price-box">
+                        <span class="total-price-label">Total Price:</span>
+                        <span class="total-price-value">₹<span id="totalPriceDisplay">5,000</span></span>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <button type="submit" class="btn-pay" id="btnPay">
+                        <i class="fas fa-lock"></i>&nbsp; Proceed to Payment
+                    </button>
+                </form>
+            </div>
+
+            <!-- STEP 2: QR Payment -->
+            <div class="qr-step" id="qrStep">
+                <div class="qr-title">Scan to Pay</div>
+                <div class="qr-subtitle">Use any UPI app to complete payment</div>
+
+                <div class="qr-code-wrap">
+                    <img src="" alt="Payment QR Code" id="qrImage">
+                </div>
+
+                <div class="qr-amount">
+                    <div class="label">Amount to Pay</div>
+                    <div class="amount">₹<span id="qrAmount">0</span></div>
+                </div>
+
+                <p class="qr-note">Scan the QR code with Google Pay, PhonePe, Paytm or any UPI app. Once payment is complete, click Done to confirm your booking.</p>
+
+                <button class="btn-done" id="btnDone">
+                    <i class="fas fa-check-circle"></i>&nbsp; Payment Done — Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="assets/js/script.js?v=3.0"></script>
+
+    <script>
+    (() => {
+        // ─── Supabase ─────────────────────────────────────────────────────
+        const supabase = _authClient; // reuse from head script
+
+        // ─── State ────────────────────────────────────────────────────────
+        let currentCar = null;
+        let currentCardEl = null;
+        let totalPrice = 0;
+        const bookedIds = new Set();
+
+        // ─── DOM Refs ─────────────────────────────────────────────────────
+        const modal       = document.getElementById('bookingModal');
+        const modalClose  = document.getElementById('modalClose');
+        const formStep    = document.getElementById('formStep');
+        const qrStep      = document.getElementById('qrStep');
+        const bookingForm = document.getElementById('bookingForm');
+        const modalError  = document.getElementById('modalError');
+
+        const bDuration   = document.getElementById('bDuration');
+        const bUnit       = document.getElementById('bUnit');
+        const totalDisplay = document.getElementById('totalPriceDisplay');
+        const qrImage     = document.getElementById('qrImage');
+        const qrAmount    = document.getElementById('qrAmount');
+
+        // ─── Helpers ──────────────────────────────────────────────────────
+        function formatINR(n) {
+            return n.toLocaleString('en-IN');
+        }
+
+        function calcTotal() {
+            if (!currentCar) return 0;
+            const rate = parseInt(currentCar.rate); // per hour
+            const dur  = parseFloat(bDuration.value) || 1;
+            const unit = bUnit.value;
+            let hours = dur;
+            if (unit === 'day')  hours = dur * 24;
+            if (unit === 'week') hours = dur * 24 * 7;
+            return Math.round(rate * hours);
+        }
+
+        function updateTotal() {
+            totalPrice = calcTotal();
+            totalDisplay.textContent = formatINR(totalPrice);
+        }
+
+        function showModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                formStep.style.display = '';
+                qrStep.classList.remove('visible');
+                bookingForm.reset();
+                bDuration.value = 1;
+                modalError.classList.remove('show');
+                currentCar = null;
+                currentCardEl = null;
+            }, 350);
+        }
+
+        function showError(msg) {
+            modalError.textContent = msg;
+            modalError.classList.add('show');
+        }
+
+        // ─── Open Modal ────────────────────────────────────────────────────
+        function openBookingModal(cardEl) {
+            const carId   = cardEl.dataset.carId;
+            const carName = cardEl.dataset.carName;
+            const cat     = cardEl.dataset.category;
+            const rate    = parseInt(cardEl.dataset.rate);
+            const img     = cardEl.dataset.img;
+
+            if (bookedIds.has(carId)) return; // already booked
+
+            currentCar    = { id: carId, name: carName, category: cat, rate, img };
+            currentCardEl = cardEl;
+
+            // Populate header
+            document.getElementById('modalCarImg').src = img;
+            document.getElementById('modalCarImg').alt = carName;
+            document.getElementById('modalCarName').textContent = carName;
+
+            const badge = document.getElementById('modalCarBadge');
+            if (cat === 'premium') {
+                badge.textContent = 'PREMIUM';
+                badge.className = 'modal-car-badge badge-premium';
+            } else {
+                badge.textContent = 'SIMPLE';
+                badge.className = 'modal-car-badge badge-simple';
+            }
+
+            document.getElementById('rateHr').textContent   = formatINR(rate);
+            document.getElementById('rateDay').textContent  = formatINR(rate * 24);
+            document.getElementById('rateWeek').textContent = formatINR(rate * 24 * 7);
+
+            // Set today as min date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bDate').min = today;
+
+            // Reset form step
+            formStep.style.display = '';
+            qrStep.classList.remove('visible');
+            updateTotal();
+            showModal();
+        }
+
+        // ─── Attach click to all car cards ────────────────────────────────
+        document.querySelectorAll('.gallery-card, .luxury-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (bookedIds.has(card.dataset.carId)) return;
+                openBookingModal(card);
+            });
+        });
+
+        // ─── Live price update ────────────────────────────────────────────
+        bDuration.addEventListener('input', updateTotal);
+        bUnit.addEventListener('change', updateTotal);
+
+        // ─── Close modal ──────────────────────────────────────────────────
+        modalClose.addEventListener('click', hideModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideModal(); });
+
+        // ─── Form Submit → Show QR ────────────────────────────────────────
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            modalError.classList.remove('show');
+
+            const fullName = document.getElementById('bFullName').value.trim();
+            const phone    = document.getElementById('bPhone').value.trim();
+            const date     = document.getElementById('bDate').value;
+            const time     = document.getElementById('bTime').value;
+
+            if (!fullName || !phone || !date || !time) {
+                showError('Please fill in all fields before proceeding.');
+                return;
+            }
+
+            totalPrice = calcTotal();
+
+            // Use the static QR image from the folder
+            qrImage.src = 'QR.png';
+            qrAmount.textContent = formatINR(totalPrice);
+
+            // Switch steps
+            formStep.style.display = 'none';
+            qrStep.classList.add('visible');
+
+            // Scroll modal to top
+            document.getElementById('modalBox').scrollTop = 0;
+        });
+
+        // ─── Done → Save to Supabase (Atomic with Conflict Check) ──────────
+        document.getElementById('btnDone').addEventListener('click', async () => {
+            const btn = document.getElementById('btnDone');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Saving...';
+
+            const fullName = document.getElementById('bFullName').value.trim();
+            const phone    = document.getElementById('bPhone').value.trim();
+            const date     = document.getElementById('bDate').value;
+            const time     = document.getElementById('bTime').value;
+            const dur      = parseInt(bDuration.value);
+            const unit     = bUnit.value;
+
+            try {
+                // Calculate Start and End DateTimes in ISO format
+                const startDT = new Date(`${date}T${time}:00`);
+                let endDT = new Date(startDT);
+
+                if (unit === 'hour') endDT.setHours(endDT.getHours() + dur);
+                if (unit === 'day')  endDT.setDate(endDT.getDate() + dur);
+                if (unit === 'week') endDT.setDate(endDT.getDate() + (dur * 7));
+
+                const { data: { session } } = await supabase.auth.getSession();
+                const userId = session?.user?.id || null;
+
+                // ── Step 1: Check for overlapping bookings (conflict check) ──
+                const { data: conflicts, error: conflictError } = await supabase
+                    .from('bookings')
+                    .select('id')
+                    .eq('car_name', currentCar.name)
+                    .lt('start_datetime', endDT.toISOString())
+                    .gt('end_datetime', startDT.toISOString())
+                    .limit(1);
+
+                if (conflictError) {
+                    // If conflict check fails (e.g. columns don't exist), skip it and proceed
+                    console.warn('Conflict check skipped:', conflictError.message);
+                } else if (conflicts && conflicts.length > 0) {
+                    alert("Sorry, this car is already booked for the selected time period. Please choose another date or time.");
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i>&nbsp; Payment Done — Confirm Booking';
+                    qrStep.classList.remove('visible');
+                    formStep.style.display = '';
+                    return;
+                }
+
+                // ── Step 2: Insert the booking directly ──
+                const { error: insertError } = await supabase
+                    .from('bookings')
+                    .insert([{
+                        car_id:          currentCar.id,
+                        car_name:        currentCar.name,
+                        car_category:    currentCar.category,
+                        car_image:       currentCar.img,
+                        full_name:       fullName,
+                        contact_number:  phone,
+                        booking_date:    date,
+                        start_time:      time,
+                        duration_value:  dur,
+                        duration_unit:   unit,
+                        total_price:     totalPrice,
+                        user_id:         userId,
+                        start_datetime:  startDT.toISOString(),
+                        end_datetime:    endDT.toISOString()
+                    }]);
+
+                if (insertError) throw insertError;
+
+                // If success, mark car as booked on card UI
+                if (currentCardEl) {
+                    bookedIds.add(currentCar.id);
+                    const overlay = document.createElement('div');
+                    overlay.className = 'booked-overlay';
+                    overlay.innerHTML = `<i class="fas fa-check-circle"></i><span>Booked</span>`;
+                    currentCardEl.appendChild(overlay);
+                }
+
+                hideModal();
+
+            } catch (err) {
+                console.error('Booking failed:', err);
+                alert("Booking error: " + (err.message || "Please try again."));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i>&nbsp; Payment Done — Confirm Booking';
+            }
+        });        // ─── Filter Logic ─────────────────────────────────────────────────
+        const filterBtns    = document.querySelectorAll('.filter-btn');
+        const searchInput   = document.getElementById('carSearch');
+        const simpleSection = document.getElementById('simple-cars');
+        const premiumSection= document.getElementById('premium-cars');
+        const allSimple     = Array.from(document.querySelectorAll('.gallery-card'));
+        const allPremium    = Array.from(document.querySelectorAll('.luxury-card'));
+        const allCards      = [...allSimple, ...allPremium];
+
+        function applyFilter() {
+            const active = document.querySelector('.filter-btn.active').dataset.filter;
+            const q = searchInput.value.toLowerCase().trim();
+
+            simpleSection.style.display  = (active === 'premium') ? 'none' : '';
+            premiumSection.style.display = (active === 'simple')  ? 'none' : '';
+
+            allCards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const matchFilter = active === 'all' ||
+                    (active === 'simple'  && card.classList.contains('gallery-card')) ||
+                    (active === 'premium' && card.classList.contains('luxury-card'));
+                const matchSearch = name.includes(q);
+                card.style.display = (matchFilter && matchSearch) ? '' : 'none';
+            });
+        }
+
+        filterBtns.forEach(btn => btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilter();
+        }));
+        searchInput.addEventListener('input', applyFilter);
+
+        // ─── Mobile Menu ──────────────────────────────────────────────────
+        const menuBtn    = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+        }
+
+        // ─── Scroll header ────────────────────────────────────────────────
+        window.addEventListener('scroll', () => {
+            document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ─── Custom cursor ────────────────────────────────────────────────
+        const cursor = document.querySelector('.custom-cursor');
+        if (cursor) {
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top  = e.clientY + 'px';
+            });
+        }
+
+    })();
+    </script>
+</body>
+</html>

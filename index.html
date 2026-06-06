@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviRide | Premium Car Rental Service — Navi Mumbai</title>
+    <meta name="description"
+        content="Rent premium cars in Navi Mumbai starting at ₹999/day. Self-drive & chauffeur-driven options. Free doorstep delivery across Vashi, Kharghar, Panvel & beyond.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naviride.com/">
+    <meta property="og:title" content="NaviRide | Premium Car Rental Service — Navi Mumbai">
+    <meta property="og:description"
+        content="Rent premium cars in Navi Mumbai starting at ₹999/day. Self-drive & chauffeur-driven options. Free doorstep delivery across Vashi, Kharghar, Panvel & beyond.">
+    <meta property="og:image" content="https://naviride.com/asset/images/car-hero-seo.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://naviride.com/">
+    <meta property="twitter:title" content="NaviRide | Premium Car Rental Service — Navi Mumbai">
+    <meta property="twitter:description"
+        content="Rent premium cars in Navi Mumbai starting at ₹999/day. Self-drive & chauffeur-driven options. Free doorstep delivery across Vashi, Kharghar, Panvel & beyond.">
+    <meta property="twitter:image" content="https://naviride.com/asset/images/car-hero-seo.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Auth redirect + global logout — runs immediately after Supabase loads -->
+    <script>
+        const SUPABASE_URL = 'https://ihgyzkjaxdjscugzcpfe.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZ3l6a2pheGRqc2N1Z3pjcGZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MTkzMDcsImV4cCI6MjA5NjI5NTMwN30.QxFZjQ2s1DGtwrUhA0vCzSN6zuqk35DSIiUyYIQS4dE';
+        const _authClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ── Global logout function — called directly from onclick in HTML ──
+        async function doLogout(e) {
+            if (e) e.preventDefault();
+            try { await _authClient.auth.signOut(); } catch(err) { console.warn(err); }
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        }
+
+        // ── Auth redirect on page load ─────────────────────────────────────
+        _authClient.auth.getSession().then(({ data: { session } }) => {
+            const isLoginPage = window.location.pathname.endsWith('login.html');
+
+            if (session && session.user) {
+                if (isLoginPage) window.location.replace('index.html');
+            }
+            // Removed redirect to login page for index page to allow public access
+        });
+    </script>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="custom-cursor"></div>
+    <div class="noise-overlay"></div>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <!-- Logo and Menu -->
+            <header>
+                <div class="nav-links">
+                    <a href="index.html#services">Services</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="bookings.html">Bookings</a>
+                    <a href="index.html#pricing">Pricing</a>
+                    <a href="index.html#contact">Contact</a>
+                    <a href="#" id="auth-nav-link" onclick="doLogout(event)">Logout</a>
+                </div>
+                <div class="header-actions">
+                    <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="menu-btn"><i class="fas fa-bars"></i></div>
+                </div>
+            </header>
+
+            <!-- Mobile Menu Overlay -->
+            <div class="mobile-menu">
+                <div class="mobile-nav-links">
+                    <a href="index.html#services">Services</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="bookings.html">Bookings</a>
+                    <a href="index.html#pricing">Pricing</a>
+                    <a href="index.html#contact">Contact</a>
+                    <a href="#" id="auth-mobile-link" onclick="doLogout(event)">Logout</a>
+                </div>
+                <div class="mobile-socials">
+                    <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <!-- Social Sidebar -->
+            <aside class="social-sidebar">
+                <div class="vertical-line"></div>
+                <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            </aside>
+
+            <!-- Main Swiper Container -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1: Orange Car -->
+                    <div class="swiper-slide hero-slide swiper-slide-active">
+                        <div class="bg-split">
+                            <div class="bg-left"></div>
+                            <div class="bg-right"></div>
+                        </div>
+                        <div class="slide-content">
+                            <div class="title-container">
+                                <h2 class="script-text">Cars, On</h2>
+                                <h1 class="main-title">
+                                    <span>D</span><span>E</span><span>M</span><span>A</span><span>N</span><span>D</span>
+                                </h1>
+                            </div>
+                            <div class="car-image">
+                                <img src="assets/img/car1.png" alt="Orange Race Car" fetchpriority="high">
+                            </div>
+                        </div>
+                        <div class="slide-footer">
+                            <div class="specs">
+                                <div class="spec-item"><span class="spec-value">302</span> <span
+                                        class="spec-unit">MPH</span></div>
+                                <div class="spec-item"><span class="spec-value">0 - 100</span> <span
+                                        class="spec-unit">KM/H</span></div>
+                                <div class="spec-item"><span class="spec-value">360</span> <span
+                                        class="spec-unit">KW</span>
+                                </div>
+                            </div>
+                            <a href="#services" class="btn-discover">Discover More <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- Slide 2: Blue Car -->
+                    <div class="swiper-slide hero-slide blue-variant">
+                        <div class="bg-split">
+                            <div class="bg-left"></div>
+                            <div class="bg-right"></div>
+                        </div>
+                        <div class="slide-content">
+                            <div class="title-container">
+                                <h2 class="script-text">Cars, On</h2>
+                                <h1 class="main-title">
+                                    <span>D</span><span>E</span><span>M</span><span>A</span><span>N</span><span>D</span>
+                                </h1>
+                            </div>
+                            <div class="car-image">
+                                <img src="assets/img/car2.png" alt="Blue Race Car" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="slide-footer">
+                            <div class="specs">
+                                <div class="spec-item"><span class="spec-value">280</span> <span
+                                        class="spec-unit">MPH</span></div>
+                                <div class="spec-item"><span class="spec-value">0 - 100</span> <span
+                                        class="spec-unit">KM/H</span></div>
+                                <div class="spec-item"><span class="spec-value">320</span> <span
+                                        class="spec-unit">KW</span>
+                                </div>
+                            </div>
+                            <a href="#services" class="btn-discover">Discover More <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- Slide 3: Red Car -->
+                    <div class="swiper-slide hero-slide red-variant">
+                        <div class="bg-split">
+                            <div class="bg-left"></div>
+                            <div class="bg-right"></div>
+                        </div>
+                        <div class="slide-content">
+                            <div class="title-container">
+                                <h2 class="script-text">Cars, On</h2>
+                                <h1 class="main-title">
+                                    <span>D</span><span>E</span><span>M</span><span>A</span><span>N</span><span>D</span>
+                                </h1>
+                            </div>
+                            <div class="car-image">
+                                <img src="assets/img/car3.png" alt="Red Race Car" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="slide-footer">
+                            <div class="specs">
+                                <div class="spec-item"><span class="spec-value">315</span> <span
+                                        class="spec-unit">MPH</span></div>
+                                <div class="spec-item"><span class="spec-value">0 - 100</span> <span
+                                        class="spec-unit">KM/H</span></div>
+                                <div class="spec-item"><span class="spec-value">380</span> <span
+                                        class="spec-unit">KW</span>
+                                </div>
+                            </div>
+                            <a href="#services" class="btn-discover">Discover More <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- Trust Badges Strip -->
+        <section class="trust-strip">
+            <div class="container">
+                <div class="trust-badges">
+                    <div class="badge"><i class="fas fa-users"></i> 500+ Happy Customers</div>
+                    <div class="badge"><i class="fas fa-car"></i> 50+ Cars Available</div>
+                    <div class="badge"><i class="fas fa-truck"></i> Free Doorstep Delivery</div>
+                    <div class="badge"><i class="fas fa-headset"></i> 24/7 Roadside Assistance</div>
+                    <div class="badge"><i class="fas fa-shield-alt"></i> Sanitized Vehicles</div>
+                    <div class="badge"><i class="fas fa-check-circle"></i> No Hidden Charges</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Booking Form -->
+        <section class="booking-form" id="booking">
+            <div class="container">
+                <div class="booking-wrapper">
+                    <h2 class="section-title">Find Your Perfect Ride in Seconds</h2>
+                    <form class="quick-book-form" id="quickBookForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i> Pick-up Location</label>
+                                <select required>
+                                    <option value="">Select location</option>
+                                    <option>Vashi</option>
+                                    <option>Nerul</option>
+                                    <option>Belapur</option>
+                                    <option>Kharghar</option>
+                                    <option>Airoli</option>
+                                    <option>Ghansoli</option>
+                                    <option>Kopar Khairane</option>
+                                    <option>Panvel</option>
+                                    <option>Kamothe</option>
+                                    <option>Kalamboli</option>
+                                    <option>Ulwe</option>
+                                    <option>Sanpada</option>
+                                    <option>Seawoods</option>
+                                    <option>Custom Location</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i> Drop-off Location</label>
+                                <select required>
+                                    <option value="">Select location</option>
+                                    <option>Vashi</option>
+                                    <option>Nerul</option>
+                                    <option>Belapur</option>
+                                    <option>Kharghar</option>
+                                    <option>Airoli</option>
+                                    <option>Ghansoli</option>
+                                    <option>Kopar Khairane</option>
+                                    <option>Panvel</option>
+                                    <option>Kamothe</option>
+                                    <option>Kalamboli</option>
+                                    <option>Ulwe</option>
+                                    <option>Sanpada</option>
+                                    <option>Seawoods</option>
+                                    <option>Same as Pick-up</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Start Date & Time</label>
+                                <input type="datetime-local" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> End Date & Time</label>
+                                <input type="datetime-local" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-car"></i> Vehicle Type</label>
+                                <select>
+                                    <option>Hatchback</option>
+                                    <option>Sedan</option>
+                                    <option>SUV</option>
+                                    <option>Premium SUV</option>
+                                    <option>Luxury</option>
+                                    <option>7-Seater MUV</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> Drive Type</label>
+                                <select>
+                                    <option>Self-Drive</option>
+                                    <option>With Driver</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search"></i> Search Available Cars
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Services Section -->
+        <section class="services" id="services">
+            <div class="diagonal-bg"></div>
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">What We Offer</h2>
+                    <p class="section-desc">More than just car rental — a complete mobility solution for Navi Mumbai</p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-car-side"></i></div>
+                        <h3>Self-Drive Rental</h3>
+                        <p>Drive on your own terms, your own schedule. Every car is sanitized, insured, and
+                            well-maintained. Unlimited freedom, zero hassle.</p>
+                        <span class="service-price">Starting at ₹999/day</span>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-user-tie"></i></div>
+                        <h3>Chauffeur-Driven</h3>
+                        <p>Professional, background-verified drivers to take you anywhere safely. All drivers are
+                            trained and know every corner of Navi Mumbai.</p>
+                        <span class="service-price">Starting at ₹1,499/day</span>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-plane"></i></div>
+                        <h3>Airport Transfer</h3>
+                        <p>Seamless pick-up and drop to Mumbai International Airport (BOM) and Navi Mumbai Airport
+                            (NMIA). Fixed pricing — no surge, no surprises.</p>
+                        <span class="service-price">Sedan ₹1,199 | SUV ₹1,599</span>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-route"></i></div>
+                        <h3>Outstation Trips</h3>
+                        <p>Planning a road trip? Lonavala, Alibaug, Mahabaleshwar, Goa, Pune, Shirdi — all-inclusive
+                            packages with unlimited km options.</p>
+                        <span class="service-price">Starting at ₹1,999 (one-way)</span>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-building"></i></div>
+                        <h3>Corporate Rentals</h3>
+                        <p>Dedicated monthly leasing for businesses. Fleet management, GST billing, priority support,
+                            and a dedicated account manager.</p>
+                        <span class="service-price">Starting at ₹19,999/month</span>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-gem"></i></div>
+                        <h3>Wedding & Events</h3>
+                        <p>Make your grand entry unforgettable. Premium luxury cars decorated for weddings, engagements,
+                            and VIP events.</p>
+                        <span class="service-price">Starting at ₹5,999/event</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dual Image Car Banner -->
+        <section class="dual-banner">
+            <div class="banner-item">
+                <img src="assets/img/jamie-street-JtP_Dqtz6D8-unsplash.jpg" alt="Luxury Interior">
+                <div class="banner-text">
+                    <h3>Unmatched Comfort</h3>
+                </div>
+            </div>
+            <div class="banner-item">
+                <img src="assets/img/why-kei-8e2gal_GIE8-unsplash.jpg" alt="Performance Drive">
+                <div class="banner-text">
+                    <h3>Peak Performance</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Fleet Section -->
+        <section class="fleet" id="fleet">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Choose Your Ride</h2>
+                    <p class="section-desc">50+ well-maintained cars across 6 categories — there's a perfect car for
+                        every journey</p>
+                </div>
+                <div class="fleet-grid">
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹999/day</div>
+                        <img src="https://images.unsplash.com/photo-1609521263047-f8f20f9174b9?w=400&h=250&fit=crop"
+                            alt="Hatchback">
+                        <h3>Hatchback</h3>
+                        <p class="fleet-cars">Swift, WagonR, i10, Tiago</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> 200 km/day included</li>
+                            <li><i class="fas fa-check"></i> City rides & errands</li>
+                        </ul>
+                    </div>
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹1,499/day</div>
+                        <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&h=250&fit=crop"
+                            alt="Sedan">
+                        <h3>Sedan</h3>
+                        <p class="fleet-cars">Dzire, Honda City, Verna, Aura</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> 200 km/day included</li>
+                            <li><i class="fas fa-check"></i> Family travel & airport runs</li>
+                        </ul>
+                    </div>
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹1,999/day</div>
+                        <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&h=250&fit=crop"
+                            alt="SUV">
+                        <h3>SUV</h3>
+                        <p class="fleet-cars">Creta, Brezza, Seltos, XUV700</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> 250 km/day included</li>
+                            <li><i class="fas fa-check"></i> Outstation & hill stations</li>
+                        </ul>
+                    </div>
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹2,999/day</div>
+                        <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=250&fit=crop"
+                            alt="Premium SUV">
+                        <h3>Premium SUV</h3>
+                        <p class="fleet-cars">Fortuner, Innova Crysta, Scorpio-N</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> 250 km/day included</li>
+                            <li><i class="fas fa-check"></i> VIP travel & premium comfort</li>
+                        </ul>
+                    </div>
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹1,799/day</div>
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=250&fit=crop"
+                            alt="7-Seater">
+                        <h3>MUV / 7-Seater</h3>
+                        <p class="fleet-cars">Ertiga, Innova, Marazzo</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> 200 km/day included</li>
+                            <li><i class="fas fa-check"></i> Group outings & pilgrimages</li>
+                        </ul>
+                    </div>
+                    <div class="fleet-card">
+                        <div class="fleet-badge">₹5,999/day</div>
+                        <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=400&h=250&fit=crop"
+                            alt="Luxury">
+                        <h3>Luxury</h3>
+                        <p class="fleet-cars">Mercedes, BMW, Audi (on request)</p>
+                        <ul class="fleet-features">
+                            <li><i class="fas fa-check"></i> Custom km packages</li>
+                            <li><i class="fas fa-check"></i> Weddings & VIP events</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fleet-includes">
+                    <h4><i class="fas fa-star"></i> Every Car Includes:</h4>
+                    <div class="includes-grid">
+                        <span><i class="fas fa-shield-alt"></i> Comprehensive Insurance</span>
+                        <span><i class="fas fa-spray-can"></i> Sanitized Interiors</span>
+                        <span><i class="fas fa-gps"></i> GPS Navigation (optional)</span>
+                        <span><i class="fas fa-road"></i> 24/7 Roadside Assistance</span>
+                        <span><i class="fas fa-tools"></i> Spare Tyre & Tool Kit</span>
+                        <span><i class="fas fa-music"></i> Bluetooth Music System</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Transparent Pricing — No Surprises, Ever</h2>
+                    <p class="section-desc">Choose a plan that fits your budget and schedule</p>
+                </div>
+                <div class="pricing-toggle">
+                    <span>Self-Drive Pricing:</span>
+                    <div class="tabs">
+                        <button class="tab active">Hatchback</button>
+                        <button class="tab">Sedan</button>
+                        <button class="tab">SUV</button>
+                        <button class="tab">Premium</button>
+                        <button class="tab">Luxury</button>
+                    </div>
+                </div>
+                <div class="pricing-table">
+                    <div class="pricing-header">
+                        <span>Plan</span>
+                        <span>4 Hours</span>
+                        <span>8 Hours</span>
+                        <span>12 Hours</span>
+                        <span>24 Hours</span>
+                        <span>Weekly</span>
+                        <span>Monthly</span>
+                    </div>
+                    <div class="pricing-row">
+                        <span class="plan-name">Hatchback</span>
+                        <span>₹499</span>
+                        <span>₹799</span>
+                        <span>₹999</span>
+                        <span>₹999</span>
+                        <span>₹5,999</span>
+                        <span>₹19,999</span>
+                    </div>
+                    <div class="pricing-row">
+                        <span class="plan-name">Sedan</span>
+                        <span>₹799</span>
+                        <span>₹1,199</span>
+                        <span>₹1,399</span>
+                        <span>₹1,499</span>
+                        <span>₹8,999</span>
+                        <span>₹29,999</span>
+                    </div>
+                    <div class="pricing-row">
+                        <span class="plan-name">SUV</span>
+                        <span>₹1,099</span>
+                        <span>₹1,699</span>
+                        <span>₹1,899</span>
+                        <span>₹1,999</span>
+                        <span>₹11,999</span>
+                        <span>₹39,999</span>
+                    </div>
+                    <div class="pricing-row highlight">
+                        <span class="plan-name">Premium SUV</span>
+                        <span>₹1,599</span>
+                        <span>₹2,499</span>
+                        <span>₹2,799</span>
+                        <span>₹2,999</span>
+                        <span>₹17,999</span>
+                        <span>₹59,999</span>
+                    </div>
+                </div>
+                <div class="special-offers">
+                    <h4><i class="fas fa-gift"></i> Special Offers</h4>
+                    <div class="offers-grid">
+                        <div class="offer-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Weekly: <strong>1 day FREE</strong></span>
+                        </div>
+                        <div class="offer-item">
+                            <i class="fas fa-calendar-week"></i>
+                            <span>Monthly: <strong>3 days FREE</strong> + Unlimited km</span>
+                        </div>
+                        <div class="offer-item">
+                            <i class="fas fa-tag"></i>
+                            <span>First-time: <strong>₹200 OFF</strong> — Code: NAVIRIDE200</span>
+                        </div>
+                        <div class="offer-item">
+                            <i class="fas fa-users"></i>
+                            <span>Refer a Friend: <strong>₹300 OFF</strong> next booking</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decorative Image Banner 2 -->
+        <section class="decorative-banner dark-banner">
+            <img src="assets/img/jamie-street-JtP_Dqtz6D8-unsplash.jpg" alt="Road Trip">
+            <div class="banner-overlay">
+                <div class="container">
+                    <h2>Your Journey Starts Here</h2>
+                    <p>Simple booking, smooth rides, unforgettable memories</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Rent a Car in 4 Simple Steps</h2>
+                    <p class="section-desc">From booking to driving — it takes less than 30 minutes</p>
+                </div>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">01</div>
+                        <div class="step-icon"><i class="fas fa-car"></i></div>
+                        <h3>Choose Your Car</h3>
+                        <p>Browse our fleet and pick the perfect car for your journey</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">02</div>
+                        <div class="step-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h3>Select Date & Time</h3>
+                        <p>Pick your preferred pickup date, time & location</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">03</div>
+                        <div class="step-icon"><i class="fas fa-file-alt"></i></div>
+                        <h3>Quick Verification</h3>
+                        <p>Upload Aadhaar + DL. Pay securely online. Instant confirmation!</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">04</div>
+                        <div class="step-icon"><i class="fas fa-key"></i></div>
+                        <h3>Get Your Car</h3>
+                        <p>Pick up from our hub OR we deliver FREE to your doorstep!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Areas Section -->
+        <section class="service-areas" id="areas">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">We Cover All of Navi Mumbai</h2>
+                    <p class="section-desc">Free doorstep delivery to every node, every sector, every society</p>
+                </div>
+                <div class="areas-grid">
+                    <div class="area-card">
+                        <h4><i class="fas fa-map-pin"></i> Central Navi Mumbai</h4>
+                        <p>Vashi, Sanpada, Turbhe, Kopar Khairane, Juinagar</p>
+                    </div>
+                    <div class="area-card">
+                        <h4><i class="fas fa-map-pin"></i> North Navi Mumbai</h4>
+                        <p>Airoli, Ghansoli, Rabale, Digha, Mahape</p>
+                    </div>
+                    <div class="area-card">
+                        <h4><i class="fas fa-map-pin"></i> South Navi Mumbai</h4>
+                        <p>Belapur (CBD), Nerul, Seawoods, Ulwe, Palm Beach</p>
+                    </div>
+                    <div class="area-card">
+                        <h4><i class="fas fa-map-pin"></i> East Navi Mumbai</h4>
+                        <p>Kharghar, Kamothe, Kalamboli, Panvel, New Panvel</p>
+                    </div>
+                    <div class="area-card">
+                        <h4><i class="fas fa-map-pin"></i> Extended Areas</h4>
+                        <p>Taloja, Dronagiri, Uran, Pen, Alibaug Road</p>
+                    </div>
+                    <div class="area-card highlight">
+                        <h4><i class="fas fa-city"></i> Also Serving</h4>
+                        <p>Mumbai • Thane • Pune • Goa (drop-off available)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decorative Image Banner 3 -->
+        <section class="decorative-banner">
+            <img src="assets/img/obi-aZKJEvydrNM-unsplash.jpg" alt="Premium Service">
+            <div class="banner-overlay">
+                <div class="container">
+                    <h2>Drive Your Dreams Today</h2>
+                    <p>From city commutes to weekend getaways</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section class="why-choose" id="why-choose">
+            <div class="diagonal-bg-alt"></div>
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why 500+ Customers Trust NaviRide</h2>
+                    <p class="section-desc">We're not just a car rental — we're your travel partner in Navi Mumbai</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-rupee-sign"></i>
+                        <h3>Transparent Pricing</h3>
+                        <p>No hidden costs, no surprises, no fine print traps</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-car"></i>
+                        <h3>Well-Maintained Fleet</h3>
+                        <p>Every car serviced regularly, sanitized before each trip</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <h3>Flexible Booking</h3>
+                        <p>Book for 4 hours or 4 months — we adapt to your schedule</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-headset"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Round-the-clock helpline — call us at 2 AM, we'll answer</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-truck"></i>
+                        <h3>Free Doorstep Delivery</h3>
+                        <p>We bring the car to your home, office, or hotel — ₹0</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-file-check"></i>
+                        <h3>Easy Documentation</h3>
+                        <p>Just Aadhaar + License. 10-minute verification</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Instant Confirmation</h3>
+                        <p>Book online → Get confirmed → Car at your door</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-gas-pump"></i>
+                        <h3>No Fuel Scams</h3>
+                        <p>Same-to-same fuel policy. No hidden fuel charges</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-credit-card"></i>
+                        <h3>Multiple Payments</h3>
+                        <p>UPI, Cards, Net Banking, Cash — your choice</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h3>Local Expertise</h3>
+                        <p>We know every shortcut, every road, every node</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Fully Insured Cars</h3>
+                        <p>Comprehensive insurance on every vehicle</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-user-check"></i>
+                        <h3>No Age Penalty</h3>
+                        <p>Drivers 21+ with valid DL — no extra fees</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials" id="reviews">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">What Our Customers Say</h2>
+                    <p class="section-desc">Real reviews from real people across Navi Mumbai</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"Booked a Creta for a weekend trip to Alibaug. The car was spotless — smelled brand new.
+                            Delivered right to my society gate in Kharghar. Best car rental in Navi Mumbai!"</p>
+                        <div class="testimonial-author">
+                            <strong>Rajesh Kulkarni</strong>
+                            <span>Kharghar — Alibaug Weekend</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"Monthly rental saves me ₹15,000+ compared to Ola/Uber daily. The car is always clean,
+                            support is responsive. Can't recommend enough for daily commuters!"</p>
+                        <div class="testimonial-author">
+                            <strong>Sneha Mehta</strong>
+                            <span>Panvel — Monthly Sedan</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"Needed an airport pickup at 4 AM. Driver arrived 10 minutes early! Car clean, AC perfect,
+                            price exactly as quoted. No surge, no drama. Love it."</p>
+                        <div class="testimonial-author">
+                            <strong>Amit Sharma</strong>
+                            <span>Vashi — Airport Transfer</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"Rented an Innova Crysta for family trip to Mahabaleshwar — 8 of us including kids. Entire
+                            process was buttery smooth. Already booked for Goa trip next month!"</p>
+                        <div class="testimonial-author">
+                            <strong>Priya Deshmukh</strong>
+                            <span>Nerul — Mahabaleshwar Trip</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decorative Image Banner 4 -->
+        <section class="decorative-banner dark-banner">
+            <img src="assets/img/why-kei-8e2gal_GIE8-unsplash.jpg" alt="Customer Satisfaction">
+            <div class="banner-overlay">
+                <div class="container">
+                    <h2>Trusted by 500+ Happy Customers</h2>
+                    <p>Your satisfaction is our priority</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <p class="section-desc">Everything you need to know before booking</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question"><span>What documents do I need?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>For self-drive — a valid Driving License and Aadhaar Card. For chauffeur-driven — just
+                                your booking confirmation. All documents verified digitally.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Is there a security deposit?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>Yes, a refundable deposit of ₹2,000–₹5,000 depending on the car category. Returned in
+                                full within 24–48 hours after you return the car.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Is fuel included in the rental price?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>Self-drive: Fuel is on you (same-to-same fuel policy). Chauffeur-driven outstation: Fuel
+                                is included in the package price.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Can I take the car outstation?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>Absolutely! We offer packages to Lonavala, Alibaug, Mahabaleshwar, Pune, Goa, Shirdi,
+                                Nashik, and more. Both self-drive and chauffeur-driven available.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>What if the car breaks down?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>We provide 24/7 roadside assistance. Call our helpline and we'll send a mechanic or
+                                replacement car, free of charge.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>What's your cancellation policy?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>Free cancellation up to 6 hours before pickup. After that, 50% charge applies. No-shows
+                                are charged in full.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>Are the cars insured?</span><i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, every single vehicle carries comprehensive insurance coverage. You're fully
+                                protected.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>What payment methods do you accept?</span><i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer">
+                            <p>UPI (Google Pay, PhonePe, Paytm), Debit Cards, Credit Cards, Net Banking, and Cash.
+                                Corporate clients get monthly invoicing with GST.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decorative Image Banner 5 -->
+        <section class="decorative-banner">
+            <img src="freestokimage/c8fe8071-322d-4207-9267-d069fad19135.jpg" alt="Book Now">
+            <div class="banner-overlay">
+                <div class="container">
+                    <h2>Ready to Hit the Road?</h2>
+                    <p>Book your perfect ride in just a few clicks</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="diagonal-bg-contact"></div>
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Get in Touch</h2>
+                    <p class="section-desc">Have a question? Need a quote? Just want to say hi? Reach out anytime.</p>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="info-group">
+                            <h4><i class="fas fa-phone"></i> PHONE:</h4>
+                            <p>+91 92212 76570</p>
+                        </div>
+                        <div class="info-group">
+                            <h4><i class="fas fa-envelope"></i> EMAIL:</h4>
+                            <p>info@naviride.com</p>
+                        </div>
+                        <div class="info-group">
+                            <h4><i class="fab fa-whatsapp"></i> WHATSAPP:</h4>
+                            <p>+91 92212 76570</p>
+                        </div>
+                        <div class="info-group">
+                            <h4><i class="fas fa-map-marker-alt"></i> OFFICE:</h4>
+                            <p>Navi Mumbai, Maharashtra — 400703</p>
+                        </div>
+                        <div class="info-group">
+                            <h4><i class="fas fa-clock"></i> HOURS:</h4>
+                            <p>24/7 — 365 Days (We never close!)</p>
+                        </div>
+                        <div class="contact-quick-links">
+                            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                            <a href="https://wa.me/919221276570" class="btn-whatsapp" target="_blank"><i
+                                    class="fab fa-whatsapp"></i>
+                                WhatsApp</a>
+                        </div>
+                        <div class="map-mockup">
+                            <img src="asset/images/map_bg.png" alt="Map Location">
+                            <div class="map-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="contact-form-wrapper">
+                        <form class="repair-form">
+                            <h3>Book Your Ride</h3>
+                            <p>Fill out the form and we'll get back to you within minutes with available options and
+                                pricing.</p>
+                            <input type="text" placeholder="Full Name" required>
+                            <input type="tel" placeholder="+91 XXXXX XXXXX" required>
+                            <input type="email" placeholder="Email Address">
+                            <input type="text" placeholder="Pickup Location">
+                            <select>
+                                <option value="">Select Vehicle Type</option>
+                                <option>Hatchback</option>
+                                <option>Sedan</option>
+                                <option>SUV</option>
+                                <option>Premium SUV</option>
+                                <option>Luxury</option>
+                                <option>7-Seater MUV</option>
+                            </select>
+                            <select>
+                                <option value="">Select Drive Type</option>
+                                <option>Self-Drive</option>
+                                <option>With Driver</option>
+                            </select>
+                            <textarea placeholder="Special Requests (optional)" rows="3"></textarea>
+                            <div class="form-footer">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" required>
+                                    <span class="checkmark"></span>
+                                    I agree with the privacy policy
+                                </label>
+                                <button type="submit" class="btn-submit">BOOK NOW</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <footer class="main-footer">
+                <div class="container footer-content">
+                    <div class="footer-logo">© 2026 NaviRide — Your Ride, Your Way</div>
+                    <div class="footer-meta">Privacy Policy | Terms & Conditions</div>
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="assets/js/script.js?v=2.1"></script>
+</body>
+
+</html>

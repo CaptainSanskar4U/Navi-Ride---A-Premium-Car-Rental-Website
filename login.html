@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | NaviRide — Premium Car Rental Navi Mumbai</title>
+    <meta name="description"
+        content="Sign in or create your NaviRide account to book premium cars in Navi Mumbai. Fast, secure, and hassle-free.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Login CSS -->
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+
+<body>
+
+    <!-- Fullscreen Video Background -->
+    <div class="video-bg-wrapper">
+        <video autoplay muted loop playsinline>
+            <source src="assets/video/bgvideo.mp4" type="video/mp4">
+        </video>
+        <div class="video-bg-overlay"></div>
+    </div>
+
+    <!-- Main Login Layout -->
+    <div class="login-container">
+
+        <!-- Left: Branding & Steps -->
+        <div class="login-info">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+
+            <h1 class="info-title">Drive<br>Your<br>Dreams.</h1>
+            <p class="info-subtitle">Join NaviRide — Navi Mumbai's most trusted premium car rental. Book in minutes,
+                drive in style.</p>
+
+            <div class="steps-list">
+                <div class="step-item active" id="step-node-1">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <h4>Create Your Account</h4>
+                        <p>Sign up with your email or social login</p>
+                    </div>
+                </div>
+                <div class="step-item" id="step-node-2">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <h4>Quick Verification</h4>
+                        <p>Upload Aadhaar + Driving License — takes 10 mins</p>
+                    </div>
+                </div>
+                <div class="step-item" id="step-node-3">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <h4>Book & Drive</h4>
+                        <p>Choose your car, pick your date, and hit the road</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Auth Form -->
+        <div class="login-form-area">
+            <div class="form-wrapper">
+
+                <!-- Form Header -->
+                <div class="form-header">
+                    <div class="logo">NAVI<span style="color: var(--primary-orange);">RIDE</span></div>
+                    <h2 id="form-title">Welcome Back</h2>
+                    <p id="form-subtitle">Please enter your details to login.</p>
+                </div>
+
+                <!-- Social Login Buttons -->
+                <div id="social-container">
+                    <div class="social-actions">
+                        <button class="social-btn" id="google-btn" type="button">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button class="social-btn" id="github-btn" type="button">
+                            <i class="fab fa-github"></i> GitHub
+                        </button>
+                    </div>
+                    <div class="divider">
+                        <span id="divider-text">or continue with email</span>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-box hidden" id="error-message"></div>
+
+                <!-- Auth Form -->
+                <form id="auth-form" autocomplete="on">
+
+                    <!-- Name Row (shown only on Sign Up) -->
+                    <div class="form-row hidden" id="name-row">
+                        <div class="input-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Raj"
+                                autocomplete="given-name">
+                        </div>
+                        <div class="input-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Sharma"
+                                autocomplete="family-name">
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required
+                            autocomplete="email">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="••••••••" required
+                                autocomplete="current-password">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Forgot Password (Login only) -->
+                    <a href="#" class="forgot-link" id="forgot-link">Forgot your password?</a>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="submit-btn">Log In</button>
+                </form>
+
+                <!-- Footer Toggle -->
+                <div class="form-footer">
+                    <p id="footer-text">Don't have an account? <span class="toggle-auth" id="toggle-link">Sign up</span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<!-- Login JS -->
+<script src="assets/js/login.js"></script>
+<!-- Main script for auth state tracking -->
+<script src="assets/js/script.js"></script>
+
+</html>
