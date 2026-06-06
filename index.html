@@ -54,12 +54,14 @@
 
         // ── Auth redirect on page load ─────────────────────────────────────
         _authClient.auth.getSession().then(({ data: { session } }) => {
+            const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || !window.location.pathname.endsWith('.html');
             const isLoginPage = window.location.pathname.endsWith('login.html');
 
             if (session && session.user) {
                 if (isLoginPage) window.location.replace('index.html');
+            } else {
+                if (isIndexPage) window.location.replace('login.html');
             }
-            // Removed redirect to login page for index page to allow public access
         });
     </script>
 

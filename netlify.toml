@@ -1,0 +1,14 @@
+[build]
+  publish = "." # The directory where your static files (index.html, etc) live
+
+# Set caching headers for assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Do not cache HTML files to ensure auth redirects run on the latest version
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
